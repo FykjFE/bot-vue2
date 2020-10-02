@@ -19,6 +19,8 @@
 | test     | 代码测试        |
 | chore     | src目录以外的修改|
 | ci     | CI/CD改动|
+| build     | 修改构建配置|
+| revert     | 版本回滚|
 
 > 例子
 ```shell
@@ -48,3 +50,9 @@ git commit -m "feat: 添加登录功能"
 > 相关文档
 - [vue官网](https://cn.vuejs.org/v2/api/)
 - [element](https://element.eleme.io/#/zh-CN)
+
+> todo
+
+- [ ] 分页助手
+- [ ] form封装
+- [ ] table封装
