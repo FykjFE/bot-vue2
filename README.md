@@ -19,6 +19,8 @@
 | test     | 代码测试        |
 | chore     | src目录以外的修改|
 | ci     | CI/CD改动|
+| build     | 修改构建配置|
+| revert     | 版本回滚|
 
 > 例子
 ```shell
