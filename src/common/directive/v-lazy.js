@@ -1,4 +1,8 @@
-//todo 懒加载
+/**
+ * 图片懒加载指令
+ * example
+ * <img v-lazy="'https://demo.jpg'"/>
+ */
 export default {
   install(Vue) {
     Vue.directive("lazy", {
