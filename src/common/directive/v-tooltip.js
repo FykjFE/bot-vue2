@@ -1,3 +1,6 @@
 //todo 鼠标滑过悬浮
-const tooltip = {};
-export default tooltip;
+export default {
+  install(Vue) {
+    Vue.directive("tooltip", {});
+  }
+};
