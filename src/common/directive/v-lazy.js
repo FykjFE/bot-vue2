@@ -1,6 +1,19 @@
 //todo 懒加载
 export default {
   install(Vue) {
-    Vue.directive("lazy", {});
+    Vue.directive("lazy", {
+      bind: function(el, binding) {
+        let lazyImageObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            let lazyImage = entry.target;
+            if (entry.intersectionRatio > 0) {
+              lazyImage.src = binding.value;
+              lazyImageObserver.unobserve(lazyImage);
+            }
+          });
+        });
+        lazyImageObserver.observe(el);
+      }
+    });
   }
 };
