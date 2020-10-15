@@ -25,7 +25,7 @@ export default {
       type: String,
       default: "white"
     },
-    /** @deprecated 废弃属性，使用color  */
+    /** @deprecated 废弃属性，使用color */
     oldColor: String
   },
   computed: {
