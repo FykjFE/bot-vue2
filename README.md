@@ -2,26 +2,9 @@
 **vue2快速开发模版**
 > 快速开始
 
-```
-# 安装依赖
-# 淘宝镜像
-npm config set sass-binary-site http://npm.taobao.org/mirrors/node-sass
-npm config set registry https://registry.npm.taobao.org
-npm install
-
-# 启动服务
-npm run lint
-npm run serve
-
-# yarn 安装
-yarn config set registry https://registry.npm.taobao.org -g
-yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g
-yarn
-
-# 启动服务
-yarn lint
-yarn serve
-```
+1. yarn
+2. yarn lint
+3. yarn serve
 
 > 代码提交规范
 

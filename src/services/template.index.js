@@ -11,8 +11,7 @@ const modules = files.keys().reduce((obj, item) => {
 Vue.prototype.$service = modules 
  */
 /* 直接impot 然后手动赋值后，开发过程中通过模糊匹配提示输入来的方便,这里用gulp自动依据modules构建*/
-import * as demo from './modules/demo.js'
-				service.demo=demo
+("service-inject");
 
 Vue.prototype.$service = service;
 export default service;

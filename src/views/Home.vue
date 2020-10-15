@@ -1,17 +1,18 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <service-demo></service-demo>
   </div>
 </template>
 
 <script>
-import HelloWorld from "@/components/HelloWorld.vue";
-
 export default {
-  name: "Home",
-  components: {
-    HelloWorld
-  }
+  components: {},
+  async mounted() {
+    let res = await this.$service.demo.getData();
+    console.log(JSON.stringify(res));
+  },
+  computed: {},
+  methods: {}
 };
 </script>
