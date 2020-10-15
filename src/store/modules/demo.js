@@ -1,16 +1,15 @@
+import { setStoreValue } from "@/store";
 const demo = {
   namespaced: true,
   state: () => ({
-    count: 0
-  }),
-  mutations: {
-    increment(state) {
-      state.count++;
+    count: 0,
+    obj: {
+      a: ""
     }
-  },
+  }),
   actions: {
-    increment({ commit }) {
-      commit("increment");
+    increment({ state }) {
+      setStoreValue("demo", "count", state.count + 1);
     }
   },
   getters: {}

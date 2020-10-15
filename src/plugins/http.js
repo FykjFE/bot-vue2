@@ -1,6 +1,5 @@
 import Vue from "vue";
 import axios from "axios";
-import baseUrl from "@/utils/index";
 
 /**
  * http封装请求
@@ -9,10 +8,14 @@ import baseUrl from "@/utils/index";
  * @param request
  * @param options
  */
+console.log(JSON.stringify(window.SITE_CONFIG["proxy"]));
 const http = axios.create({
-  baseURL: baseUrl,
+  //依据全局配置判断是否走代理
+  baseURL: window.SITE_CONFIG["proxy"] ? "/apis" : window.SITE_CONFIG.baseUrl,
   timeout: 10000,
-  headers: { "Content-Type": "application/json;charset=UTF-8" }
+  headers: {
+    "Content-Type": "application/json;charset=UTF-8"
+  }
 });
 http.interceptors.request.use(
   config => {
