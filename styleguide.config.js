@@ -1,6 +1,6 @@
 module.exports = {
 	// set your styleguidist configuration here
-	title: 'Default Style Guide',
+	title: '组件使用文档',
 	// components: 'src/components/**/[A-Z]*.vue',
 	// defaultExample: true,
 	// sections: [
