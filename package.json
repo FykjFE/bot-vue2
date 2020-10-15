@@ -22,6 +22,7 @@
 		]
 	},
 	"dependencies": {
+		"@storybook/vue": "^6.0.26",
 		"@vue/composition-api": "^1.0.0-beta.14",
 		"axios": "^0.20.0",
 		"core-js": "^3.6.5",
