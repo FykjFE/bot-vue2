@@ -8,11 +8,8 @@
 </template>
 
 <script>
-/**
- * @author  闰月飞鸟
- */
 export default {
-  name: "ServiceDemo",
+  name: "MoonButton",
   props: {
     /**
      * 字体颜色
