@@ -1,15 +1,15 @@
 <template>
   <button :style="styles" @click="handleClick">
-    <!--    @slot 默认插槽-->
+    <!-- @slot 默认插槽 -->
     <slot></slot>
-    <!--    @slot 前缀插槽-->
+    <!-- @slot 前缀插槽 -->
     <slot name="prefix"></slot>
   </button>
 </template>
 
 <script>
 export default {
-  name: "app-button",
+  name: "AppButton",
   props: {
     /**
      * 字体颜色
@@ -38,6 +38,14 @@ export default {
     }
   },
   methods: {
+    /**
+     * 单击事件
+     * @param {Event} e
+     * @public
+     */
+    init(e) {
+      console.log(JSON.stringify(e));
+    },
     handleClick(e) {
       /** 点击事件
        * @event click
@@ -56,7 +64,6 @@ export default {
 </script>
 
 <docs>
-按钮组件
 
 ## 例子
 
@@ -68,7 +75,7 @@ Orange button:
 
 其他列子
 
-```jsx
+```jsx 
 <app-button color="pink" background="blue">
   Ugly button
 </app-button>
