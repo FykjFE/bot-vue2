@@ -1,0 +1,7 @@
+# Ignore artifacts:
+build
+
+# Ignore all HTML files:
+*.html
+
+/src/services/template.index.js
