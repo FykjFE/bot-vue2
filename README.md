@@ -1,10 +1,13 @@
 # bot-vue2
 **vue2快速开发模版**
+> 安装命令
+
+`npx @fykj/bot init demo`
 > 快速开始
 
-1. yarn
-2. yarn lint
-3. yarn serve
+1. `npm install`
+2. `npm run lint`
+3. `npm run serve`
 
 > 代码提交规范
 
