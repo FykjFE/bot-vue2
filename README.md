@@ -8,6 +8,9 @@
 1. `npm install`
 2. `npm run lint`
 3. `npm run serve`
+> 组件文档
+
+`npm run styleguide`
 
 > 代码提交规范
 
