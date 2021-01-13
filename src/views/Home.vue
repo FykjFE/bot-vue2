@@ -9,8 +9,10 @@
 export default {
   components: {},
   async mounted() {
-    let res = await this.$service.demo.getData();
-    console.log(JSON.stringify(res));
+    // let res = await this.$service.demo.getData();
+    // console.log(JSON.stringify(res));
+
+    console.log(this.$service.demo.getData);
   },
   computed: {},
   methods: {}

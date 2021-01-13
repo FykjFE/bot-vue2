@@ -1,4 +1,6 @@
 const path = require('path')
+const VersionPlugin = require('./webpackConfig/VersionPlugin.js')
+var versionCode = VersionPlugin.setVersion(); // 版本号
 const resolve = dir => {
 	return path.join(__dirname, dir)
 }
@@ -9,7 +11,8 @@ const resolve = dir => {
 // 如果您的应用程序部署在子路径中，则需要在这指定子路径
 // 例如：https://www.foobar.com/my-app/
 // 需要将它改为'/my-app/'./${request.contextPath}
-const BASE_URL = process.env.NODE_ENV === 'production' ? '/' : '/'
+const BASE_URL = process.env.NODE_ENV === 'prod' ? '/' : '/'
+
 module.exports = {
 	// Project deployment base
 	// By default we assume your app will be deployed at the root of a domain,
@@ -19,6 +22,9 @@ module.exports = {
 	// https://www.foobar.com/my-app/
 	// then change this to '/my-app/'
 	publicPath: BASE_URL,
+	outputDir: "dist", // 输出文件目录
+	lintOnSave: false, // eslint 是否在保存时检查
+	assetsDir: versionCode, // 配置js、css静态资源二级目录的位置  
 	// tweak internal webpack configuration.
 	// see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
 	// 如果你不需要使用eslint，把lintOnSave设为false即可
@@ -29,8 +35,37 @@ module.exports = {
 
 		config.plugin("html").tap(args => {
 			args[0].minify = false;
+			args[0].inject = process.env.NODE_ENV == 'prod' || process.env.NODE_ENV == 'production' ? false : true;
 			return args;
 		});
+		/* 	config.plugin('extract-css').tap(options => {
+				options[0].filename = version+'/css/[name].css'
+				return options
+		  }) */
+		config.optimization.splitChunks({
+			chunks: 'all',
+			cacheGroups: {
+				libs: {
+					name: 'chunk-libs',
+					test: /[\\/]node_modules[\\/]/,
+					priority: 10,
+					chunks: 'initial' // only package third parties that are initially dependent
+				},
+				elementUI: {
+					name: 'chunk-elementUI', // split elementUI into a single package
+					priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
+					test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
+				},
+				commons: {
+					name: 'chunk-commons',
+					test: resolve('src/components'), // can customize your rules
+					minChunks: 3, //  minimum common number
+					priority: 5,
+					reuseExistingChunk: true
+				}
+			}
+		})
+
 	},
 	configureWebpack: config => {
 		config.resolve = {
@@ -40,10 +75,20 @@ module.exports = {
 				'@': resolve('src')
 			}
 		}
+		config.plugins.push(new VersionPlugin({ versionCode }))
 	},
 	// 设为false打包时不生成.map文件
 	productionSourceMap: false,
+	css: {
+		// 是否使用css分离插件 ExtractTextPlugin
+		extract: true,
+		// 开启 CSS source maps?
+		sourceMap: true,
+		// css预设器配置项
+		loaderOptions: {
 
+		},
+	},
 	// 这里写你调用接口的基础路径，来解决跨域，如果设置了代理，那你本地开发环境的axios的baseUrl要写为 '' ，即空字符串
 	//设置跨域代理
 	devServer: {

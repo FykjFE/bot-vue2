@@ -5,13 +5,16 @@ const {
 	watch
 } = require("gulp");
 let $ = require("gulp-load-plugins")();
+
+const isDev = process.env.NODE_ENV == 'dev' || process.env.NODE_ENV == 'development'
+
 /**
- * @description 将service目录modules目录中的所有js文件注册到service 目录下的index文件中，
+ * @description 将service目录modules目录中的所有js文件注册到service 目录下的index文件中，开发模式下使用import导入，生产模式下用webpack批导入
+ * 
  */
 function importService() {
-	let target = src("src/services/template.index.js").pipe($.rename("index.js"));
 	return src(["src/services/modules/*.js"])
-		.on("data", function(file) {
+		.on("data", function (file) {
 			var fileName = file.relative.toString("utf-8").replace(".js", "");
 			let str = `
 				import * as ${fileName} from './modules/${file.relative}'
@@ -21,50 +24,49 @@ function importService() {
 			return file;
 		})
 		.pipe($.concat("index.js"))
-		.on("end", function(e) {
-			if (!e) {
-				//src/services/modules中不存在js文件时 将模板中的占位字符清除
-				target
-					.pipe($.replace(/\"service-inject\"/g, ""))
-					.pipe(dest("src/services/"));
-			}
-		})
-		.on("data", function(file) {
+		.on("data", function (file) {
 			let buffer = file.contents.toString("utf-8");
 			let str = buffer.toString("utf-8").trim();
-			target
-				.pipe($.replace(/\"service-inject\"/g, str))
-				.pipe(dest("src/services/"));
-		});
+			let source = '11'
+			if (!isDev) {
+				source = `
+				import Vue from "vue";
+				//自动扫描引入方式，配置方便
+				const files = require.context('./modules', true, /\.js/)
+				const modules = files.keys().reduce((obj, item) => {
+					obj[item.match(/[^\./]+(?=\.js)/g)[0]] = files(item)
+					return obj
+				}, {})
+				Vue.prototype.$service = modules
+				export default modules;`
+			}
+			else {
+				source = `
+				import Vue from "vue";
+				const service = {};
+				/* 直接impot 然后手动赋值后，开发过程中通过模糊匹配提示输入来的方便,这里用gulp自动依据modules构建*/
+				${str}
+				Vue.prototype.$service = service;
+				export default service;
+				`
+			}
+			file.contents = Buffer.from(source)
+			return file
+		}).pipe(dest("src/services"));
 }
-//修改src/config中的配置自动同步到public中
-function setGlobalConfig() {
-	let target = src(`src/config/index-${process.env.NODE_ENV}.js`).pipe($.rename("index.js"));
-	return target
-		.pipe(dest("public/config"));
-}
-
 function watchProcess(cb) {
 	// 开发模式下开启监听
-	if (process.env.NODE_ENV === 'dev') {
+	if (isDev) {
 		watch(
-			["src/services/modules/*.js", "src/services/template.index.js"], {
-				delay: 500,
-				events: ["add", "unlink", "unlinkDir", "ready"]
-			},
+			["src/services/modules/*.js"], {
+			delay: 500,
+			events: ["add", "unlink", "unlinkDir", "ready"]
+		},
 			importService
-		);
-		watch(
-			["src/config/index-*.js"], {
-				delay: 500,
-				events: ['all', 'ready']
-			},
-			setGlobalConfig
 		);
 
 	} else {
 		importService()
-		setGlobalConfig()
 	}
 	cb();
 }
